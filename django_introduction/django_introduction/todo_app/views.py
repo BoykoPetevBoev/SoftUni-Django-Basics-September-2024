@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from djangoIntroduction.todo_app.models import Task
+from django_introduction.todo_app.models import Task
 
 # Create your views here.
 
