@@ -1,0 +1,25 @@
+services:
+
+  db:
+    image: postgres:13
+    container_name: workshop_petstagram_db
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    environment:
+      POSTGRES_DB: workshop_petstagram_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+
+  web:
+    build: .
+    container_name: workshop_petstagram_web
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
