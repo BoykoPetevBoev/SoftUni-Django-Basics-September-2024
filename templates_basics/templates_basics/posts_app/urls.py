@@ -1,7 +1,13 @@
-from django.urls import path
-from templates_basics.posts_app.views import dashboard, index
+from django.urls import include, path
+from templates_basics.posts_app import views
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('dashboard/', dashboard, name='dash'),
+    path('', views.index, name='index'),
+    path('dashboard/', views.dashboard, name='dash'),
+    path('add-post/', views.add_post, name='add-post'),
+    path('<int:pk>/', include([
+        path('edit/', views.post_edit, name='edit-post'),
+        path('delete/', views.post_delete, name='post-delete'),
+        path('details/', views.post_details, name='post-details'),
+    ])),
 ]
