@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Posts</h1>
+
+<div>
+    {% include 'posts_app/search-form.html' %}
+</div>
+<div class="container">
+    <div class="posts">
+        {% for post in posts %}
+        <div class="post">
+            <a href="{% url 'post-details' post.pk %}">
+                <h2>{{ post.title|capfirst }}</h2>
+
+                {% if not post.content %}
+                {% lorem 3 p %}
+                {% else %}
+                {{ post.content }}
+                {% endif %}
+
+                <div class="post-meta">
+                    <span>Posted by {{ post.author|default:"anonymous" }} on {{ post.created_at|date:"d-M-Y" }}</span>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <h1>No Posts</h1>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
