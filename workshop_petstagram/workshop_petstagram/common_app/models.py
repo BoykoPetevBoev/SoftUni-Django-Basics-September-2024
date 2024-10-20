@@ -5,6 +5,9 @@ from workshop_petstagram.photos_app.models import Photo
 # Create your models here.
 
 class Comment(models.Model):
+    class Meta:
+        ordering = ['-date_time_of_publication']
+        
     text = models.TextField(
         max_length=300
     )
@@ -19,7 +22,7 @@ class Comment(models.Model):
     )
     
     
-class Likes(models.Model):
+class Like(models.Model):
     to_photo = models.ForeignKey(
         to=Photo,
         on_delete=models.CASCADE
