@@ -1,6 +1,55 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render, resolve_url
+from pyperclip import copy
+
+from workshop_petstagram.photos_app.models import Photo
+from workshop_petstagram.common_app.models import Like, Comment
+from workshop_petstagram.common_app.forms import CommentForm, SearchForm
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'common/home-page.html')
+    all_photos = Photo.objects.all()
+    comment_form = CommentForm()
+    search_form = SearchForm(request.GET)
+
+    if search_form.is_valid():
+        all_photos = all_photos.filter(tagged_pets__name__icontains=search_form.cleaned_data['pet_name'])
+
+    print(all_photos[0])
+
+    context = {
+        "all_photos": all_photos,
+        "search_form": search_form,
+        "comment_form": comment_form,
+    }
+    return render(request, 'common/home-page.html', context)
+
+
+def like(request, photo_id: int):
+    like = Like.objects.filter(
+        to_photo_id=photo_id
+    ).first()
+     
+    if like:
+        like.delete()
+    else:
+        like = Like(to_photo_id=photo_id)
+        like.save()
+        
+    return redirect(request.META.get('HTTP_REFERER') + f'#{photo_id}')
+
+
+def share(request, photo_id: int):
+    copy(request.META.get('HTTP_HOST') + resolve_url('photo-details', photo_id))
+    return redirect(request.META.get('HTTP_REFERER') + f'#{photo_id}')
+    
+    
+def comment(request, photo_id: int):
+    if request.method == "POST":
+        photo = Photo.objects.get(pk=photo_id)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.to_photo = photo
+            comment.save()
+    return redirect(request.META.get('HTTP_REFERER') + f'#{photo_id}')

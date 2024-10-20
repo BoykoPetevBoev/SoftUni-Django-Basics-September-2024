@@ -1,4 +1,4 @@
-import slugify
+from django.template.defaultfilters import slugify
 from django.db import models
 # Create your models here.
 
@@ -25,7 +25,7 @@ class Pet(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
-        if(not self.slug):
+        if not self.slug:
             self.slug = slugify(f"{self.name}-{self.id}")
             
         super().save(*args, **kwargs)
