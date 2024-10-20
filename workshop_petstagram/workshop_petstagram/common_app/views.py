@@ -1,3 +1,5 @@
+from django.views.generic import ListView
+
 from django.shortcuts import redirect, render, resolve_url
 from pyperclip import copy
 
@@ -7,22 +9,41 @@ from workshop_petstagram.common_app.forms import CommentForm, SearchForm
 
 # Create your views here.
 
-def home(request):
-    all_photos = Photo.objects.all()
-    comment_form = CommentForm()
-    search_form = SearchForm(request.GET)
+class HomePage(ListView):
+    model = Photo
+    template_name = 'common/home-page.html'
+    context_object_name = 'all_photos'
+    paginate_py = 1
 
-    if search_form.is_valid():
-        all_photos = all_photos.filter(tagged_pets__name__icontains=search_form.cleaned_data['pet_name'])
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = CommentForm()
+        context['search_form'] = SearchForm(self.request.GET)
+        return context
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        pet_name = self.request.GET.get('pet_name')
+        if pet_name:
+            queryset = queryset.filter(tagged_pets__name__icontains=pet_name)
+        return queryset
 
-    print(all_photos[0])
 
-    context = {
-        "all_photos": all_photos,
-        "search_form": search_form,
-        "comment_form": comment_form,
-    }
-    return render(request, 'common/home-page.html', context)
+
+# def home(request):
+#     all_photos = Photo.objects.all()
+#     comment_form = CommentForm()
+#     search_form = SearchForm(request.GET)
+
+#     if search_form.is_valid():
+#         all_photos = all_photos.filter(tagged_pets__name__icontains=search_form.cleaned_data['pet_name'])
+
+#     context = {
+#         "all_photos": all_photos,
+#         "search_form": search_form,
+#         "comment_form": comment_form,
+#     }
+#     return render(request, 'common/home-page.html', context)
 
 
 def like(request, photo_id: int):
