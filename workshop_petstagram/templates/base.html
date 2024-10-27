@@ -2,30 +2,26 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="icon" type="image/x-icon" href="{% static '/images/free-30-instagram-stories-icons23_122570.png' %}">
+  <head>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static '/images/free-30-instagram-stories-icons23_122570.png' %}" />
     <title>Petstagram</title>
-</head>
+  </head>
 
-<body>
+  <body>
+    <div id="wrapper">
+      <header>
+        {% include 'common/nav.html' %}
+      </header>
 
-    <header>
-        {% include "common/nav.html" %}
-    </header>
-
-    <main>
+      <main>
         {% block content %}
         {% endblock %}
-    </main>
-
-    <div class="footer">
-        <span class="footer-section">
-            © 2024 SOFTUNI WORKSHOP FOR PYTHON WEB MODULE
-        </span>
+      </main>
     </div>
 
-</body>
-
+    <div class="footer">
+      <span class="footer-section">© 2024 SOFTUNI WORKSHOP FOR PYTHON WEB MODULE</span>
+    </div>
+  </body>
 </html>

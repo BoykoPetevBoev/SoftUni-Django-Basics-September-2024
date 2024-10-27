@@ -7,7 +7,6 @@ from django.core.validators import MinValueValidator
 #     pass
 class Profile(AbstractUser):
     # username = models.CharField(
-    #     #  min_length=2,
     #     unique=True,
     #     max_length=15,
     #     #  TODO add char validation
