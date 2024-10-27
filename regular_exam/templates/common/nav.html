@@ -1,0 +1,17 @@
+{% load static %}
+
+<a id="logo" href="{% url 'home' %}"><img id="logo-img" src="{% static 'images/logo.png' %}" alt="logo" /></a>
+
+<nav>
+  {% if author %}
+    <div class="user">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'create-post' %}">New Post</a>
+      <a href="{% url 'details-author' %}">Author's Profile</a>
+    </div>
+  {% else %}
+    <div class="guest">
+      <a href="{% url 'create-author' %}">Create Author's Profile</a>
+    </div>
+  {% endif %}
+</nav>
